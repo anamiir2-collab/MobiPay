@@ -59,7 +59,7 @@ jobs:
           suffix = s[s.index(marker):]
           for item in permissions:
               if item.strip() not in prefix:
-                  prefix += item + "\\n"
+                  prefix += item + "\n"
           p.write_text(prefix + suffix)
           PY
 
