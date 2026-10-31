@@ -1,0 +1,63 @@
+name: Import MobiPay Flutter project
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/import-mobipay.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  extract-and-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Extract project and add missing files only
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ZIP_FILE="MobiPay-Flutter-Project.zip"
+          test -f "$ZIP_FILE"
+
+          mkdir -p .import_tmp
+          unzip -q "$ZIP_FILE" -d .import_tmp
+
+          SOURCE=".import_tmp/MobiPay-Flutter-Project/mobipay"
+          test -d "$SOURCE"
+          test -f "$SOURCE/pubspec.yaml"
+          test -f "$SOURCE/lib/main.dart"
+
+          # Copy files into the repository root without replacing anything already present.
+          cp -an "$SOURCE/." .
+
+          # Confirm the essential Flutter project files exist after the merge.
+          test -f "pubspec.yaml"
+          test -f "lib/main.dart"
+          test -d "lib/screens"
+
+          ADDED_COUNT=$(find "$SOURCE" -type f | while read -r file; do
+            rel="${file#"$SOURCE"/}"
+            if [ -f "$rel" ]; then
+              cmp -s "$file" "$rel" || true
+            fi
+          done | wc -l)
+
+          # Remove temporary extraction data and the source archive only after verification.
+          rm -rf .import_tmp
+          rm "$ZIP_FILE"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Import MobiPay Flutter project files"
+            git push
+          fi
+
+          echo "Flutter project files merged. Existing files were preserved. Source ZIP removed after verification."
