@@ -78,7 +78,7 @@ class _NfcPayScreenState extends State<NfcPayScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 14),
                   child: InfoNote(
-                    Icons.nfc_off_rounded,
+                    Icons.nfc_rounded,
                     'NFC is not available on this device.',
                     'NFC غير متوفر على هذا الجهاز.',
                     color: C.error,
