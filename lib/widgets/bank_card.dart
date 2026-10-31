@@ -23,7 +23,7 @@ class BankCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final b = card.bank;
     return AspectRatio(
-      ratio: 1.586,
+      aspectRatio: 1.586,
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [b.c1, b.c2], begin: Alignment.topLeft, end: Alignment.bottomRight),
