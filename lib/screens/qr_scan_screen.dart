@@ -28,7 +28,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
     _timer = Timer(const Duration(milliseconds: 3400), () {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (_) => const QrConfirmScreen(merchant: qrMerchants[0])));
+          builder: (_) => QrConfirmScreen(merchant: qrMerchants[0])));
     });
   }
 
