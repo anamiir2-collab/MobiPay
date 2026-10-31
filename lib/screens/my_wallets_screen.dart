@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/app.dart';
 import '../core/style.dart';
+import '../models/models.dart';
 import '../data/mock_data.dart';
 import '../widgets/ui.dart';
 import '../widgets/wallet_card.dart';
