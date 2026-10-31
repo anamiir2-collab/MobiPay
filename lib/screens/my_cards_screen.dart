@@ -50,7 +50,6 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                 height: 254,
                 child: PageView.builder(
                   itemCount: userCards.length,
-                  viewportFraction: 0.88,
                   onPageChanged: (i) {
                     HapticFeedback.selectionClick();
                     setState(() => _page = i);
@@ -106,7 +105,7 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
 
             /* ── all cards list ── */
             const SizedBox(height: 20),
-            SectionTitle(App.t('All payment methods', 'كل طرق الدفع')),
+            SectionTitle('All payment methods', 'كل طرق الدفع'),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(children: [
