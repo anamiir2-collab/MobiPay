@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                     width: 42,
                     height: 42,
                     decoration: BoxDecoration(color: C.card, shape: BoxShape.circle, border: Border.all(color: C.line)),
-                    child: const Icon(Icons.notifications_none_rounded, size: 21, color: C.text),
+                    child: Icon(Icons.notifications_none_rounded, size: 21, color: C.text),
                   ),
                   Positioned(
                     top: 9,
