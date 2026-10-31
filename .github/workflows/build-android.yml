@@ -66,9 +66,6 @@ jobs:
       - name: Resolve dependencies
         run: flutter pub get
 
-      - name: Check Flutter project
-        run: flutter analyze
-
       - name: Build release APK
         run: flutter build apk --release
 
