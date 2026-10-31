@@ -170,7 +170,7 @@ class HomeScreen extends StatelessWidget {
 
             /* ── recently used payment methods ── */
             const SizedBox(height: 22),
-            SectionTitle(App.t('Recently used', 'الأحدث استخدامًا')),
+            SectionTitle('Recently used', 'الأحدث استخدامًا'),
             SizedBox(
               height: 58,
               child: ListView(
@@ -193,7 +193,7 @@ class HomeScreen extends StatelessWidget {
 
             /* ── recent transactions ── */
             const SizedBox(height: 22),
-            SectionTitle(App.t('Recent transactions', 'آخر العمليات'),
+            SectionTitle('Recent transactions', 'آخر العمليات',
                 actionEn: 'See all', actionAr: 'عرض الكل',
                 onAction: () => _toTab(context, 2)),
             Container(
