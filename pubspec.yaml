@@ -1,0 +1,33 @@
+name: mobipay
+description: >-
+  MobiPay – unified digital payment application (NFC & QR) for Egypt.
+  Manage Egyptian bank cards and e-wallets, tap to pay, scan merchant QR,
+  and recharge mobile balance. Prototype: all money movements are simulated.
+publish_to: 'none'
+version: 2.0.0+2
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ── Real-feature integrations ──────────────────────────────────────────
+  # The prototype intentionally uses NO third-party packages so it builds
+  # anywhere. Uncomment the ones below when wiring production features
+  # (see README.md "Integration requirements" for the full checklist):
+  #
+  # mobile_scanner: ^5.2.3          # real merchant-QR scanning (camera)
+  # qr_flutter: ^4.1.0              # render real EMVCo / InstaPay QR payloads
+  # nfc_manager: ^3.5.0             # NFC reader mode – card reading (ISO 14443)
+  # flutter_secure_storage: ^9.2.2  # store payment TOKENS (never PAN / CVV)
+  # local_auth: ^2.3.0              # Face ID / fingerprint unlock + confirm
+  # dio: ^5.7.0                     # PSP / bank API transport
+  # intl: ^0.19.0                   # full AR/EN localization & number formats
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

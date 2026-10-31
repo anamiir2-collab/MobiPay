@@ -1,0 +1,40 @@
+<!--
+  MobiPay – Android permissions snippet.
+  After running `flutter create .` (README step 2), merge the <uses-permission>
+  and <uses-feature> elements into android/app/src/main/AndroidManifest.xml.
+
+  NFC permission covers BOTH:
+    • NFC reader mode (reading a physical card to add it to the wallet)
+    • HCE card emulation (tap-to-pay) – see README §NFC for the certification
+      and tokenization prerequisites before enabling emulation.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <!-- Not required at install time: app degrades gracefully without NFC/camera -->
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <application>
+        <!--
+        Declare ONLY when real HCE tap-to-pay is enabled (requires issuer /
+        network certification – Visa VTS or Mastercard MDES through a PSP):
+
+        <service
+            android:name="com.mobipay.hce.MobiPayHceService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NFC_SERVICE">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/apduservice" />
+        </service>
+        -->
+    </application>
+</manifest>
