@@ -1,6 +1,7 @@
 name: Import MobiPay Flutter project
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -33,22 +34,24 @@ jobs:
           test -f "$SOURCE/pubspec.yaml"
           test -f "$SOURCE/lib/main.dart"
 
-          # Copy files into the repository root without replacing anything already present.
+          # Copy into repository root, skipping every existing file.
           cp -an "$SOURCE/." .
 
-          # Confirm the essential Flutter project files exist after the merge.
+          # Verify every archive file has a destination before deleting the archive.
+          while IFS= read -r -d '' source_file; do
+            rel="${source_file#"$SOURCE"/}"
+            test -f "$rel"
+          done < <(find "$SOURCE" -type f -print0)
+
           test -f "pubspec.yaml"
           test -f "lib/main.dart"
           test -d "lib/screens"
 
-          ADDED_COUNT=$(find "$SOURCE" -type f | while read -r file; do
-            rel="${file#"$SOURCE"/}"
-            if [ -f "$rel" ]; then
-              cmp -s "$file" "$rel" || true
-            fi
-          done | wc -l)
+          SOURCE_COUNT=$(find "$SOURCE" -type f | wc -l)
+          DEST_COUNT=$(find . -path './.git' -prune -o -path './.import_tmp' -prune -o -type f -print | wc -l)
+          echo "Verified $SOURCE_COUNT source files; repository currently has $DEST_COUNT files."
 
-          # Remove temporary extraction data and the source archive only after verification.
+          # Delete the original ZIP only after successful extraction and verification.
           rm -rf .import_tmp
           rm "$ZIP_FILE"
 
@@ -60,4 +63,4 @@ jobs:
             git push
           fi
 
-          echo "Flutter project files merged. Existing files were preserved. Source ZIP removed after verification."
+          echo "Merge completed. Existing files were preserved and the source ZIP was removed."
