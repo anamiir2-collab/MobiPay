@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: const Icon(Icons.contactless_rounded, size: 46, color: C.primary),
             ),
             const SizedBox(height: 18),
-            const Text('MobiPay', style: T.display.copyWith(color: Colors.white, fontSize: 32)),
+            Text('MobiPay', style: T.display.copyWith(color: Colors.white, fontSize: 32)),
             const SizedBox(height: 6),
             Text('Pay. Tap. Scan.',
                 style: T.body.copyWith(color: Colors.white.withOpacity(0.75), letterSpacing: 1.2)),
