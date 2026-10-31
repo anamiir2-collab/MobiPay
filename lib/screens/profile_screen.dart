@@ -154,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (value.isNotEmpty)
             Text(value, style: T.small.copyWith(color: C.muted, fontSize: 12)),
           const SizedBox(width: 4),
-          const Icon(Icons.chevron_right, size: 19, color: C.muted),
+          Icon(Icons.chevron_right, size: 19, color: C.muted),
         ]),
       ),
     );
