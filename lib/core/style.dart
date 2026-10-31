@@ -27,6 +27,7 @@ class C {
 
   // Dark palette
   static const Color dBg = Color(0xFF0C0F16);
+  static const Color _bgD = Color(0xFF0C0F16);
   static const Color _cardD = Color(0xFF161B24);
   static const Color _altD = Color(0xFF1D232E);
   static const Color _inputD = Color(0xFF1C222D);
