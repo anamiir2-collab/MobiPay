@@ -24,34 +24,56 @@ jobs:
           set -euo pipefail
 
           ZIP_FILE="MobiPay-Flutter-Project.zip"
-          test -f "$ZIP_FILE"
+          if [[ ! -f "$ZIP_FILE" ]]; then
+            echo "::error::The archive $ZIP_FILE was not found in the repository root."
+            exit 1
+          fi
 
           mkdir -p .import_tmp
           unzip -q "$ZIP_FILE" -d .import_tmp
 
-          SOURCE=".import_tmp/MobiPay-Flutter-Project/mobipay"
-          test -d "$SOURCE"
+          # Detect the actual Flutter project directory instead of assuming
+          # a particular folder layout inside the ZIP archive.
+          SOURCE=""
+          while IFS= read -r -d '' manifest; do
+            candidate="$(dirname "$manifest")"
+            if [[ -f "$candidate/lib/main.dart" ]]; then
+              SOURCE="$candidate"
+              break
+            fi
+          done < <(find .import_tmp -type f -name pubspec.yaml -print0)
+
+          if [[ -z "$SOURCE" ]]; then
+            echo "::error::Could not find a Flutter project containing both pubspec.yaml and lib/main.dart."
+            echo "Archive contents (first 200 entries):"
+            unzip -Z1 "$ZIP_FILE" | head -n 200 || true
+            exit 1
+          fi
+
+          echo "Detected Flutter project at: $SOURCE"
           test -f "$SOURCE/pubspec.yaml"
           test -f "$SOURCE/lib/main.dart"
 
           # Copy into repository root, skipping every existing file.
           cp -an "$SOURCE/." .
 
-          # Verify every archive file has a destination before deleting the archive.
+          # Verify every source file has a destination before deleting the archive.
+          SOURCE_COUNT=0
           while IFS= read -r -d '' source_file; do
             rel="${source_file#"$SOURCE"/}"
-            test -f "$rel"
+            if [[ ! -f "$rel" ]]; then
+              echo "::error::Missing destination after copy: $rel"
+              exit 1
+            fi
+            SOURCE_COUNT=$((SOURCE_COUNT + 1))
           done < <(find "$SOURCE" -type f -print0)
 
           test -f "pubspec.yaml"
           test -f "lib/main.dart"
-          test -d "lib/screens"
 
-          SOURCE_COUNT=$(find "$SOURCE" -type f | wc -l)
-          DEST_COUNT=$(find . -path './.git' -prune -o -path './.import_tmp' -prune -o -type f -print | wc -l)
-          echo "Verified $SOURCE_COUNT source files; repository currently has $DEST_COUNT files."
+          echo "Verified $SOURCE_COUNT project files."
 
-          # Delete the original ZIP only after successful extraction and verification.
+          # Delete the ZIP only after extraction and verification succeed.
           rm -rf .import_tmp
           rm "$ZIP_FILE"
 
@@ -61,6 +83,8 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "Import MobiPay Flutter project files"
             git push
+          else
+            echo "No repository changes to commit."
           fi
 
           echo "Merge completed. Existing files were preserved and the source ZIP was removed."
