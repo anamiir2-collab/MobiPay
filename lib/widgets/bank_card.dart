@@ -264,7 +264,7 @@ class BankCardRow extends StatelessWidget {
               ),
             ]),
           ),
-          trailing ?? const Icon(Icons.chevron_right, color: C.muted),
+          trailing ?? Icon(Icons.chevron_right, color: C.muted),
         ]),
       ),
     );
